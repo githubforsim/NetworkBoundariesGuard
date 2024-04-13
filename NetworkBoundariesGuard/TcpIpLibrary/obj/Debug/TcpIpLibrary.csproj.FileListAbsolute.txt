@@ -1,0 +1,6 @@
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\Networks\TcpIpLibrary\bin\Debug\TcpIpLibrary.dll
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\Networks\TcpIpLibrary\bin\Debug\TcpIpLibrary.pdb
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\Networks\TcpIpLibrary\obj\Debug\TcpIpLibrary.csproj.AssemblyReference.cache
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\Networks\TcpIpLibrary\obj\Debug\TcpIpLibrary.csproj.CoreCompileInputs.cache
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\Networks\TcpIpLibrary\obj\Debug\TcpIpLibrary.dll
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\Networks\TcpIpLibrary\obj\Debug\TcpIpLibrary.pdb

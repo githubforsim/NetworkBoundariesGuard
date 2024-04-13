@@ -1,0 +1,15 @@
+﻿namespace TcpIpWrapper
+{
+    public static class Factory
+    {
+        public static DistributeToClients.IManagerForOwner CreateMultiThreaded(DistributeToClients.IChief chief, SNfoConnexion nfo)
+        {
+            return new DistributeToClients.MultiThreadWrapper(chief, nfo);
+        }
+
+        public static DistributeAllMsgToOneClient.IManagerForOwner CreateMultiThreaded(DistributeAllMsgToOneClient.IClientOfConnexion client, DistributeAllMsgToOneClient.IChief chief, EModeConnexion mode)
+        {
+            return new DistributeAllMsgToOneClient.MultiThreadWrapper(client, chief, mode);
+        }
+    }
+}

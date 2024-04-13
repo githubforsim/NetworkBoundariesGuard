@@ -1,0 +1,50 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using TcpIpLibrary;
+
+namespace TcpIpWrapper.DistributeAllMsgToOneClient
+{
+    internal class MultiThreadWrapper : MultiThreadWrapperBase, IManagerForOwner
+    {
+        // *** PUBLIC ***********************************
+
+        public MultiThreadWrapper(IClientOfConnexion client, IChief chief, EModeConnexion mode)
+            : base(new SNfoConnexion(mode, client.AdressIP, client.PortConnexion))
+        {
+            _client = client;
+            _chief = chief;
+        }
+
+        // *** RESTRICTED *******************************
+
+        private readonly IChief _chief;
+
+        private readonly IClientOfConnexion _client;
+
+        protected override void WhatToDoWithAReceivedMessage(AMsg msg)
+        {
+            _client.OnReceiveMessage(msg);
+            _chief.OnReceiveMessage(msg);
+        }
+
+        protected override void WhatToDoWithALog(string log)
+        {
+            _chief.Log(log);
+        }
+
+        protected override void OnConnect()
+        {
+            base.OnConnect();
+
+            _client.OnConnect();
+        }
+
+        protected override void OnDisconnect()
+        {
+            base.OnDisconnect();
+
+            _client.OnDisconnect();
+        }
+    }
+}

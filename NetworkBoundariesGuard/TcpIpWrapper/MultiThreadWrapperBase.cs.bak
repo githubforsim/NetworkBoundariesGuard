@@ -1,0 +1,251 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using TcpIpLibrary;
+
+namespace TcpIpWrapper
+{
+    internal abstract class MultiThreadWrapperBase
+    {
+        // *** PUBLIC ***********************************
+
+        public MultiThreadWrapperBase(SNfoConnexion nfo)
+        {
+            _nfo = nfo;
+        }
+
+        public bool IsNetworkActive { get; private set; }
+
+        public void Start()
+        {
+            IsNetworkActive = true;
+        }
+
+        public void Core()
+        {
+            MultiThreadsCore();
+
+            if (true == IsNetworkActive)
+            {
+                DistributeReceivedMessages();
+                SendReceivedLogsToOwner();
+            }
+
+            ConnexionStatusSurvey();
+        }
+
+        public void SendMsg(AMsg msg)
+        {
+            lock (_listOfMessageToSend)
+            {
+                _listOfMessageToSend.Add(msg);
+            }
+        }
+
+        public void SendMsg<T>(string destinataire, string motClef, T content, bool isRoutine = true) where T : new()
+        {
+            var msg = new Msg<T>(destinataire, motClef, content);
+            msg._head._isRoutine = isRoutine;
+            SendMsg(msg);
+        }
+
+        public void SendMsg(string destinataire, string motClef, string txt, bool isRoutine = true)
+        {
+            var msg = new Msg<SimpleTxt>(destinataire, motClef, new SimpleTxt(txt));
+            msg._head._isRoutine = isRoutine;
+            SendMsg(msg);
+        }
+
+        public void SetFiltersForLogs(IList<string> filters)
+        {
+            _listOfFiltersForLogs = filters;
+        }
+
+        public EStatutConnexion StatutConnexion()
+        {
+            return _statusConnexion;
+        }
+
+        public bool IsLogAllReceivedMessages { private get; set; }
+
+        // *** RESTRICTED *******************************
+
+        private Thread _thread;
+
+        private SNfoConnexion _nfo;
+
+        private EStatutConnexion _statusConnexion;
+
+        private EStatutConnexion _lastStatusConnexion = EStatutConnexion.NOT_CONNECTED;
+
+        private long _timeLastCallOfUpdate_ms;
+
+        private readonly List<AMsg> _listOfMessageToSend = new List<AMsg>();
+
+        private readonly List<string> _listOfReceivedLogs = new List<string>();
+
+        private readonly List<AMsg> _listOfReceivedMessages = new List<AMsg>();
+
+        private IList<string> _listOfFiltersForLogs = new List<string>();
+
+        private ManagerForThreadLoop _manager;
+
+        protected virtual void OnConnect()
+        {
+        }
+
+        protected virtual void OnDisconnect()
+        {
+        }
+
+        protected abstract void WhatToDoWithAReceivedMessage(AMsg msg);
+
+        protected abstract void WhatToDoWithALog(string log);
+
+        private void DistributeReceivedMessages()
+        {
+            lock (_listOfReceivedMessages)
+            {
+                foreach (var msg in _listOfReceivedMessages)
+                {
+
+                    if (msg.Destinataire.Contains("PING") || msg.MotClef.Contains("PING") || msg.Destinataire.Contains("1ER_MSG"))
+                    {
+                        continue;
+                    }
+
+                    WhatToDoWithAReceivedMessage(msg);
+                }
+
+                _listOfReceivedMessages.Clear();
+            }
+        }
+
+        private void SendReceivedLogsToOwner()
+        {
+            lock (_listOfReceivedLogs)
+            {
+                foreach (var log in _listOfReceivedLogs)
+                {
+                    if (false == IsWordFiltered(log))
+                    {
+                        WhatToDoWithALog(log);
+                    }
+                }
+
+                _listOfReceivedLogs.Clear();
+            }
+        }
+
+        private static long Time_ms()
+        {
+            return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        }
+
+        private void MultiThreadsCore()
+        {
+            _timeLastCallOfUpdate_ms = Time_ms();
+
+            if (null == _thread || false == _thread.IsAlive && true == IsNetworkActive)
+            {
+                _thread = new Thread(new ParameterizedThreadStart(ThreadLoop))
+                {
+                    IsBackground = true
+                };
+
+                _thread.Start(this);
+            }
+        }
+
+        private void ThreadLoop(object o)
+        {
+            const float _gardWaitingTime_s = 5;
+            if (null != _manager)
+            {
+                _manager.Close();
+            }
+            _manager = new ManagerForThreadLoop(_nfo);
+
+            while (true)
+            {
+                if (_manager.IsActive != IsNetworkActive)
+                {
+                    _manager.IsActive = IsNetworkActive;
+                }
+
+                if (true == IsNetworkActive)
+                {
+                    _manager.Core();
+
+                    long currentTime_ms = Time_ms();
+                    float deltaTime_s = (float)(currentTime_ms - _timeLastCallOfUpdate_ms) / 1e3f;
+                    if (deltaTime_s > _gardWaitingTime_s)
+                    {
+                        _thread.Abort();
+                        break;
+                    }
+
+                    lock (_listOfMessageToSend)
+                    {
+                        foreach (var msg in _listOfMessageToSend)
+                        {
+                            _manager.SendMsg(msg);
+                        }
+
+                        _listOfMessageToSend.Clear();
+                    }
+
+                    lock (_listOfReceivedMessages)
+                    {
+                        var extract = _manager.ExtractReceivedMsg();
+                        foreach (var msg in extract)
+                        {
+                            _listOfReceivedMessages.Add(msg);
+                        }
+                    }
+
+                    lock (_listOfReceivedLogs)
+                    {
+                        var extract = _manager.ExtractLogs();
+                        foreach (var log in extract)
+                        {
+                            _listOfReceivedLogs.Add(log);
+                        }
+                    }
+
+                    _statusConnexion = _manager.StatutConnexion();
+                }
+            }
+        }
+
+        private bool IsWordFiltered(string word)
+        {
+            foreach (var filter in _listOfFiltersForLogs)
+            {
+                if (word.Contains(filter))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void ConnexionStatusSurvey()
+        {
+            if (_lastStatusConnexion != _statusConnexion)
+            {
+                if (EStatutConnexion.CONNECTED == _statusConnexion)
+                {
+                    OnConnect();
+                }
+                else
+                {
+                    OnDisconnect();
+                }
+
+                _lastStatusConnexion = _statusConnexion;
+            }
+        }
+    }
+}

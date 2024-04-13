@@ -1,0 +1,12 @@
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\ILogger\bin\Debug\ILogger.dll
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\ILogger\bin\Debug\ILogger.pdb
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\ILogger\obj\Debug\ILogger.csproj.AssemblyReference.cache
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\ILogger\obj\Debug\ILogger.csproj.CoreCompileInputs.cache
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\ILogger\obj\Debug\ILogger.dll
+G:\NOMADE_DR1\Partiel_PCMEC_PAN\Partiel_PCMEC_PAN_git\MoteurPhysique\ILogger\obj\Debug\ILogger.pdb
+D:\Codes\NetworkBoundariesGuard\NetworkBoundariesGuard\ILogger\bin\Debug\ILogger.dll
+D:\Codes\NetworkBoundariesGuard\NetworkBoundariesGuard\ILogger\bin\Debug\ILogger.pdb
+D:\Codes\NetworkBoundariesGuard\NetworkBoundariesGuard\ILogger\obj\Debug\ILogger.csproj.AssemblyReference.cache
+D:\Codes\NetworkBoundariesGuard\NetworkBoundariesGuard\ILogger\obj\Debug\ILogger.csproj.CoreCompileInputs.cache
+D:\Codes\NetworkBoundariesGuard\NetworkBoundariesGuard\ILogger\obj\Debug\ILogger.dll
+D:\Codes\NetworkBoundariesGuard\NetworkBoundariesGuard\ILogger\obj\Debug\ILogger.pdb

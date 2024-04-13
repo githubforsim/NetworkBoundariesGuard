@@ -1,0 +1,13 @@
+﻿using TcpIpLibrary;
+
+namespace TcpIpWrapper.DistributeToClients
+{
+    public interface IManagerForUSer
+    {
+        void SendMsg(AMsg msg);
+        void SendMsg<T>(string destinataire, string motClef, T content, bool isRoutine = true) where T : new();       
+        void SendMsg(string destinataire, string motClef, string txt, bool isRoutine = true);
+        void DeclareClient(IClientForMessages client);
+        EStatutConnexion StatutConnexion();
+    }
+}
