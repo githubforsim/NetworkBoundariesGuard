@@ -72,8 +72,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(ProjectDir)bin\Debug\TcpIpWrapper.dll" "$(ProjectDir)..\..\..\IHM (Unity 2020.3.25)\Assets\OtherDLL\"
-xcopy /Y "$(ProjectDir)bin\Debug\TcpIpWrapper.pdb" "$(ProjectDir)..\..\..\IHM (Unity 2020.3.25)\Assets\OtherDLL\"
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

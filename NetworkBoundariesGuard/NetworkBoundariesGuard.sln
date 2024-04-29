@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpIpLibrary", "TcpIpLibrar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpIpWrapper", "TcpIpWrapper\TcpIpWrapper.csproj", "{54BC40DA-43A1-4D71-9A3B-83FF42AED750}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BasesForNetwork", "BasesForNetwork", "{C410C983-995E-4905-B078-3A4206D3436B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8EC60887-1E77-4360-AE1E-554767043AB1} = {C410C983-995E-4905-B078-3A4206D3436B}
+		{F59AD60E-8BA0-435F-90E5-E38635707623} = {C410C983-995E-4905-B078-3A4206D3436B}
+		{54BC40DA-43A1-4D71-9A3B-83FF42AED750} = {C410C983-995E-4905-B078-3A4206D3436B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {773A7D03-B7B6-4CA8-A7B1-AA9173D86870}
